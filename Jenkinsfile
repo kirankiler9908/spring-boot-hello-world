@@ -6,24 +6,30 @@ pipeline {
         }
     }
 
+    environment {
+        DOCKER_HUB_CREDENTIALS = credentials('kiranss499@gmail.com')  // Credential ID for Docker Hub
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', credentialsId: 'kiranss499@gmail.com', url: 'https://github.com/kirankiler9908/spring-boot-hello-world/'
-                  sh 'ls -la'
+                git branch: 'main', credentialsId: 'kiranss499@gmail.com', url: 'https://github.com/kirankiler9908/spring-boot-hello-world.git'
+                sh 'ls -la'  // Optional: List files in the cloned repository for verification
             }
         }
-       stage('Build Spring Boot Application') {
+
+        stage('Build Spring Boot Application') {
             steps {
-                dir('src') {  // Change to your Spring Boot app directory
-                    sh 'mvn clean install'  // Adjust Maven command as per your project
+                dir('spring-boot-hello-world') {  // Adjust to your actual Spring Boot app directory
+                    sh 'mvn clean install'  // Maven command to build the Spring Boot application
                 }
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("kiran:${env.BUILD_ID}", "-f Dockerfile .")
+                    docker.build("kiran:${env.BUILD_ID}", "-f spring-boot-hello-world/Dockerfile .")
                 }
             }
         }
@@ -31,7 +37,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://hub.docker.com/', 'kiranss499@gmail.com') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
                         docker.image("kiran:${env.BUILD_ID}").push()
                     }
                 }
@@ -39,9 +45,9 @@ pipeline {
         }
     }
 
- //   post {
-    //    always {
-          //  cleanWs()
-    //    }
- //   }
+    post {
+        always {
+            cleanWs()
+        }
+    }
 }
