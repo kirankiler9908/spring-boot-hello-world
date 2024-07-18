@@ -10,7 +10,7 @@ pipeline {
         }
        stage('Build Spring Boot Application') {
             steps {
-                dir('https://github.com/kirankiler9908/spring-boot-hello-world') {  // Change to your Spring Boot app directory
+                dir('spring-boot-hello-world') {  // Change to your Spring Boot app directory
                     sh './mvnw clean package'  // Adjust Maven command as per your project
                 }
             }
