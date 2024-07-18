@@ -1,5 +1,5 @@
 pipeline {
-    agent any  // Use 'any' as the agent type
+    agent any  // Use 'any' as the agent type for the entire pipeline
 
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('kiranss499@gmail.com')  // Credential ID for Docker Hub
@@ -28,7 +28,12 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-            agent any  // Use 'any' as the agent type for this stage
+            agent {
+                docker {
+                    image 'docker:19.03.12'  // Example Docker image version
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'  // Mount Docker socket for Docker-in-Docker
+                }
+            }
             steps {
                 script {
                     docker.build("kiran:${env.BUILD_ID}", "-f spring-boot-hello-world/Dockerfile .")
