@@ -11,7 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("your-image-name:${env.BUILD_ID}", "-f Dockerfile .")
+                    docker.build("kiran:${env.BUILD_ID}", "-f Dockerfile .")
                 }
             }
         }
@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://hub.docker.com/', 'kiranss499@gmail.com') {
-                        docker.image("your-image-name:${env.BUILD_ID}").push()
+                        docker.image("kiran:${env.BUILD_ID}").push()
                     }
                 }
             }
