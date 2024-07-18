@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/kirankiler9908/spring-boot-hello-world'
+                git 'https://github.com/kirankiler9908/spring-boot-hello-world.git'
             }
         }
 
