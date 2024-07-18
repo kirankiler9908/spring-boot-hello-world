@@ -1,52 +1,34 @@
 pipeline {
-    agent any  // Use 'any' as the agent type for the entire pipeline
-
-    environment {
-        DOCKER_HUB_CREDENTIALS = credentials('kiranss499@gmail.com')  // Credential ID for Docker Hub
-    }
+    agent any
 
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', credentialsId: 'kiranss499@gmail.com', url: 'https://github.com/kirankiler9908/spring-boot-hello-world.git'
-                sh 'ls -la'  // Optional: List files in the cloned repository for verification
+                git branch: 'main', credentialsId: 'your-git-credentials-id', url: 'https://github.com/your/repository.git'
             }
         }
 
         stage('Build Spring Boot Application') {
-            agent {
-                docker {
-                    image 'maven:3.8.4-openjdk-11'
-                    args '-v /root/.m2:/root/.m2'  // Optional: Mount Maven cache volume for faster builds
-                }
-            }
             steps {
-                dir('spring-boot-hello-world') {  // Adjust to your actual Spring Boot app directory
-                    sh 'mvn clean install'  // Maven command to build the Spring Boot application
-                }
+                // Example assuming Maven is installed globally on the Jenkins agent
+                sh 'mvn clean package'  // Adjust Maven command as per your project
             }
         }
 
         stage('Build Docker Image') {
-            agent {
-                docker {
-                    image 'docker:19.03.12'  // Example Docker image version
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'  // Mount Docker socket for Docker-in-Docker
-                }
-            }
             steps {
                 script {
-                    docker.build("kiran:${env.BUILD_ID}", "-f spring-boot-hello-world/Dockerfile .")
+                    // Build Docker image using the JAR file from the Spring Boot build
+                    docker.build("your-image-name:${env.BUILD_ID}", "-f Dockerfile .")
                 }
             }
         }
 
         stage('Push Docker Image') {
-            agent any  // Use 'any' as the agent type for this stage
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        docker.image("kiran:${env.BUILD_ID}").push()
+                    docker.withRegistry('https://your-docker-registry', 'your-docker-credentials-id') {
+                        docker.image("your-image-name:${env.BUILD_ID}").push()
                     }
                 }
             }
