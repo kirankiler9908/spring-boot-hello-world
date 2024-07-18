@@ -4,14 +4,14 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/kirankiler9908/spring-boot-hello-world.git'
+                git branch: 'main', credentialsId: 'kiranss499@gmail.com', url: 'https://github.com/kirankiler9908/spring-boot-hello-world.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("spring-app")
+                    docker.build("spring-app:${env.BUILD_ID}")
                 }
             }
         }
@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://your-docker-registry', 'docker-credentials-id') {
-                        docker.image("spring-app").push()
+                        docker.image("spring-app:${env.BUILD_ID}").push()
                     }
                 }
             }
