@@ -8,7 +8,13 @@ pipeline {
                   sh 'ls -la'
             }
         }
-
+       stage('Build Spring Boot Application') {
+            steps {
+                dir('https://github.com/kirankiler9908/spring-boot-hello-world') {  // Change to your Spring Boot app directory
+                    sh './mvnw clean package'  // Adjust Maven command as per your project
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
