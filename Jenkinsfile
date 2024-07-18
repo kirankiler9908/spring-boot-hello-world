@@ -5,6 +5,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 git branch: 'main', credentialsId: 'kiranss499@gmail.com', url: 'https://github.com/kirankiler9908/spring-boot-hello-world/'
+                  sh 'ls -la'
             }
         }
 
