@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -26,7 +27,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://hub.docker.com/', 'killer9908') {
+                    withDockerRegistry(credentialsId: 'dockerhub') {
                         docker.image("kiran:${env.BUILD_ID}").push()
                     }
                 }
