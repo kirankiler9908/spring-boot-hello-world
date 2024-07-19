@@ -10,7 +10,7 @@ pipeline {
         }
        stage('Build Spring Boot Application') {
             steps {
-                dir('src') {  // Change to your Spring Boot app directory
+                dir('/') {  // Change to your Spring Boot app directory
                     sh 'mvn clean install'  // Adjust Maven command as per your project
                 }
             }
