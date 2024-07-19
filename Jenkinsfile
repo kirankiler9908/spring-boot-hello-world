@@ -19,7 +19,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("kiran:${env.BUILD_ID}", "-f Dockerfile .")
+                    docker.build("killer9908/kiran:${env.BUILD_ID}", "-f Dockerfile .")
                 }
             }
         }
@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'dockerhub') {
-                        docker.image("kiran:${env.BUILD_ID}").push()
+                        docker.image("killer9908/kiran:${env.BUILD_ID}").push()
                     }
                 }
             }
