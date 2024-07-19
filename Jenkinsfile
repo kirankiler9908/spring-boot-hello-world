@@ -26,7 +26,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://hub.docker.com/', 'kiranss499@gmail.com') {
+                    docker.withRegistry('https://hub.docker.com/', 'killer9908') {
                         docker.image("kiran:${env.BUILD_ID}").push()
                     }
                 }
