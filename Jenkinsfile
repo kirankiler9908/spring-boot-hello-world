@@ -10,9 +10,9 @@ pipeline {
         }
        stage('Build Spring Boot Application') {
             steps {
-                dir('/') {  // Change to your Spring Boot app directory
+                
                     sh 'mvn clean install'  // Adjust Maven command as per your project
-                }
+               
             }
         }
         stage('Build Docker Image') {
